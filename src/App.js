@@ -1,23 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import ServiceList from './ServiceList';
+import AddServiceForm from './AddServiceForm';
 
 function App() {
+  const [services, setServices] = useState([
+    { id: 1, name: "Dental Checkup", description: "Routine dental checkup", price: 50 },
+    { id: 2, name: "Blood Test", description: "Complete blood count", price: 30 },
+  ]);
+
+  const addService = (newService) => {
+    setServices([...services, { ...newService, id: services.length + 1 }]);
+  };
+
+  const updateService = (id, updatedService) => {
+    setServices(services.map(service => service.id === id ? updatedService : service));
+  };
+
+  const deleteService = (id) => {
+    setServices(services.filter(service => service.id !== id));
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Healthcare Services</h1>
+      <AddServiceForm addService={addService} />
+      <ServiceList 
+        services={services} 
+        updateService={updateService} 
+        deleteService={deleteService} 
+      />
     </div>
   );
 }
